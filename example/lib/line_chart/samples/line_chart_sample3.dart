@@ -125,7 +125,7 @@ class LineChartSample3 extends StatelessWidget {
                   ),
                   dotData: FlDotData(
                       show: true,
-                      getDotColor: (_) => Colors.white,
+                      getDotColor: (_) => Colors.deepOrange,
                       dotSize: 6,
                       strokeWidth: 4,
                       getStrokeColor: (_) => Colors.deepOrange,

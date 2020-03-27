@@ -572,21 +572,8 @@ bool showAllSpotsBelowLine(FlSpot spot) {
   return true;
 }
 
-/// The callback passed to get the color of a [FlSpot]
-///
-/// The callback receives as parameter the [FlSpot] for which to retrieve
-/// the color and returns the [Color] that needs to be used
-typedef GetDotColorCallback = Color Function(FlSpot);
-
-/// It returns [Colors.blue] for all spots.
-Color _defaultGetDotColor(FlSpot _) => Colors.blue;
-
-/// It returns [Colors.red] for all spots.
-Color _defaultGetDotStrokeColor(FlSpot _) => Colors.red;
-
 /// This class holds data about drawing spot dots on the drawing bar line.
 class FlDotData {
-
   /// Determines show or hide all dots.
   final bool show;
 
@@ -947,6 +934,9 @@ class LineTouchData extends FlTouchData {
   /// and goes through the targeted spot.
   final bool fullHeightTouchLine;
 
+  /// Sets touch indicator to sticky
+  final bool stickyTouchIndicator;
+
   /// Informs the touchResponses
   final Function(LineTouchResponse) touchCallback;
 
@@ -971,6 +961,7 @@ class LineTouchData extends FlTouchData {
     this.touchSpotThreshold = 10,
     this.fullHeightTouchLine = false,
     this.handleBuiltInTouches = true,
+    this.stickyTouchIndicator = false,
     this.touchCallback,
   }) : super(enabled);
 

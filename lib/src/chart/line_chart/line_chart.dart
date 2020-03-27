@@ -242,10 +242,12 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
         _showingTouchedTooltips.add(MapEntry(0, sortedLineSpots));
       });
     } else {
-      setState(() {
-        _showingTouchedTooltips.clear();
-        _showingTouchedIndicators.clear();
-      });
+      if (!widget.data.lineTouchData.stickyTouchIndicator) {
+        setState(() {
+          _showingTouchedTooltips.clear();
+          _showingTouchedIndicators.clear();
+        });
+      }
     }
   }
 

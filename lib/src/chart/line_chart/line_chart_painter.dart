@@ -116,6 +116,8 @@ class LineChartPainter extends AxisChartPainter<LineChartData>
       _drawTouchDot(canvas, size, barData);
     }
 
+    _drawPictures(canvas, size);
+
     if (data.clipToBorder) {
       canvas.restore();
     }
@@ -924,25 +926,6 @@ class LineChartPainter extends AxisChartPainter<LineChartData>
 
         canvas.drawDashedLine(from, to, _extraLinesPaint, line.dashArray);
 
-        if (line.sizedPicture != null) {
-          final double centerX = line.sizedPicture.width / 2;
-          final double centerY = line.sizedPicture.height / 2;
-          final double xPosition = leftChartPadding - centerX;
-          final double yPosition = to.dy - centerY;
-
-          canvas.save();
-          canvas.translate(xPosition, yPosition);
-          canvas.drawPicture(line.sizedPicture.picture);
-          canvas.restore();
-        }
-
-        if (line.image != null) {
-          final double centerX = line.image.width / 2;
-          final double centerY = line.image.height / 2;
-          final Offset centeredImageOffset = Offset(leftChartPadding - centerX, to.dy - centerY);
-          canvas.drawImage(line.image, centeredImageOffset, _imagePaint);
-        }
-
         if (line.label != null && line.label.show) {
           final HorizontalLineLabel label = line.label;
           final TextStyle style = TextStyle(fontSize: 11, color: line.color).merge(label.style);
@@ -988,25 +971,6 @@ class LineChartPainter extends AxisChartPainter<LineChartData>
 
         canvas.drawDashedLine(from, to, _extraLinesPaint, line.dashArray);
 
-        if (line.sizedPicture != null) {
-          final double centerX = line.sizedPicture.width / 2;
-          final double centerY = line.sizedPicture.height / 2;
-          final double xPosition = to.dx - centerX;
-          final double yPosition = viewSize.height - bottomChartPadding - centerY;
-
-          canvas.save();
-          canvas.translate(xPosition, yPosition);
-          canvas.drawPicture(line.sizedPicture.picture);
-          canvas.restore();
-        }
-        if (line.image != null) {
-          final double centerX = line.image.width / 2;
-          final double centerY = line.image.height / 2;
-          final Offset centeredImageOffset =
-              Offset(to.dx - centerX, viewSize.height - bottomChartPadding - centerY);
-          canvas.drawImage(line.image, centeredImageOffset, _imagePaint);
-        }
-
         if (line.label != null && line.label.show) {
           final VerticalLineLabel label = line.label;
           final TextStyle style = TextStyle(fontSize: 11, color: line.color).merge(label.style);
@@ -1035,6 +999,70 @@ class LineChartPainter extends AxisChartPainter<LineChartData>
               ),
             ),
           );
+        }
+      }
+    }
+  }
+
+  void _drawPictures(Canvas canvas, Size viewSize) {
+    if (data.extraLinesData == null) {
+      return;
+    }
+
+    final Size chartUsableSize = getChartUsableDrawSize(viewSize);
+
+    if (data.extraLinesData.horizontalLines.isNotEmpty) {
+      for (HorizontalLine line in data.extraLinesData.horizontalLines) {
+        final double leftChartPadding = getLeftOffsetDrawSize();
+
+        final double rightChartPadding = getExtraNeededHorizontalSpace() - getLeftOffsetDrawSize();
+        final Offset to =
+            Offset(viewSize.width - rightChartPadding, getPixelY(line.y, chartUsableSize));
+
+        if (line.sizedPicture != null) {
+          final double centerX = line.sizedPicture.width / 2;
+          final double centerY = line.sizedPicture.height / 2;
+          final double xPosition = leftChartPadding - centerX;
+          final double yPosition = to.dy - centerY;
+
+          canvas.save();
+          canvas.translate(xPosition, yPosition);
+          canvas.drawPicture(line.sizedPicture.picture);
+          canvas.restore();
+        }
+
+        if (line.image != null) {
+          final double centerX = line.image.width / 2;
+          final double centerY = line.image.height / 2;
+          final Offset centeredImageOffset = Offset(leftChartPadding - centerX, to.dy - centerY);
+          canvas.drawImage(line.image, centeredImageOffset, _imagePaint);
+        }
+      }
+    }
+
+    if (data.extraLinesData.verticalLines.isNotEmpty) {
+      for (VerticalLine line in data.extraLinesData.verticalLines) {
+        final double bottomChartPadding = getExtraNeededVerticalSpace() - getTopOffsetDrawSize();
+        final Offset to =
+            Offset(getPixelX(line.x, chartUsableSize), viewSize.height - bottomChartPadding);
+
+        if (line.sizedPicture != null) {
+          final double centerX = line.sizedPicture.width / 2;
+          final double centerY = line.sizedPicture.height / 2;
+          final double xPosition = to.dx - centerX;
+          final double yPosition = viewSize.height - bottomChartPadding - centerY;
+
+          canvas.save();
+          canvas.translate(xPosition, yPosition);
+          canvas.drawPicture(line.sizedPicture.picture);
+          canvas.restore();
+        }
+        if (line.image != null) {
+          final double centerX = line.image.width / 2;
+          final double centerY = line.image.height / 2;
+          final Offset centeredImageOffset =
+              Offset(to.dx - centerX, viewSize.height - bottomChartPadding - centerY);
+          canvas.drawImage(line.image, centeredImageOffset, _imagePaint);
         }
       }
     }

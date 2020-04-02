@@ -83,8 +83,6 @@ class LineChartPainter extends AxisChartPainter<LineChartData>
       _clipToBorder(canvas, size);
     }
 
-    super.paint(canvas, size);
-
     for (BetweenBarsData betweenBarsData in data.betweenBarsData) {
       _drawBetweenBarsArea(canvas, size, data, betweenBarsData);
     }
@@ -101,7 +99,9 @@ class LineChartPainter extends AxisChartPainter<LineChartData>
         continue;
       }
 
+      super.paint(canvas, size);
       _drawBarLine(canvas, size, barData);
+      _drawPictures(canvas, size);
       _drawDots(canvas, size, barData);
 
       if (data.extraLinesData != null && data.extraLinesData.extraLinesOnTop) {
@@ -115,8 +115,6 @@ class LineChartPainter extends AxisChartPainter<LineChartData>
       final barData = data.lineBarsData[i];
       _drawTouchDot(canvas, size, barData);
     }
-
-    _drawPictures(canvas, size);
 
     if (data.clipToBorder) {
       canvas.restore();

@@ -116,6 +116,8 @@ class LineChartPainter extends AxisChartPainter<LineChartData>
       _drawTouchDot(canvas, size, barData);
     }
 
+    _drawPictures(canvas, size);
+
     if (data.clipToBorder) {
       canvas.restore();
     }
